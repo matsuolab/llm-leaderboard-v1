@@ -39,9 +39,11 @@ find_available_gpus() {
 run_model() {
   local gpu_ids=$1
   local model_name=$2
+  # model_name を Dockerのコンテナ名として有効な形式に変換
+  safe_model_name=$(echo "$model_name" | tr -cd 'a-zA-Z0-9_.-')
   sudo docker run --env-file $HOME/llm-leaderboard-v1/.env --mount type=bind,src=$HOME,dst=$HOME \
   --workdir $HOME/llm-leaderboard-v1 --ipc host --gpus "\"device=$gpu_ids\"" \
-  --rm --name "`whoami`_${model_name}_llm-leaderboard" llm-leaderboard python3 src/japanese-task-evaluation.py --model_name $model_name &
+  --rm --name "`whoami`_${safe_model_name}_llm-leaderboard" llm-leaderboard python3 src/japanese-task-evaluation.py --model_name $model_name &
 }
 
 # モデルを実行するためのループ
