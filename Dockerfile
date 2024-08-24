@@ -18,3 +18,4 @@ RUN pip3 install wheel
 RUN pip3 install flash-attn --no-build-isolation
 RUN pip3 install -U transformers
 RUN pip3 install -U langchain-community
+RUN pip3 install -U ipywidgets
