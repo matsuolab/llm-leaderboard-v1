@@ -63,7 +63,7 @@ if __name__ == "__main__":
             artifact_dir = artifact.download()
             dataset = load_from_disk(artifact_dir)
         else:
-            dataset = load_dataset("shunk031/JGLUE", name=eval_category[0])
+            dataset = load_dataset("shunk031/JGLUE", trust_remote_code=True, name=eval_category[0])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
             max_new_tokens=5, torch_dtype=torch.bfloat16, temperature=temperature, 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
             artifact_dir = artifact.download()
             dataset = load_from_disk(artifact_dir)
         else:
-            dataset = load_dataset("shunk031/JGLUE", name=eval_category[1])
+            dataset = load_dataset("shunk031/JGLUE", trust_remote_code=True, name=eval_category[1])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
             max_new_tokens=3, torch_dtype=torch.bfloat16, temperature=temperature,
@@ -95,7 +95,7 @@ if __name__ == "__main__":
             artifact_dir = artifact.download()
             dataset = load_from_disk(artifact_dir)
         else:
-            dataset = load_dataset("shunk031/JGLUE", name=eval_category[2])
+            dataset = load_dataset("shunk031/JGLUE", trust_remote_code=True, name=eval_category[2])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
             max_new_tokens=3, torch_dtype=torch.bfloat16, temperature=temperature,
@@ -112,7 +112,7 @@ if __name__ == "__main__":
             artifact_dir = artifact.download()
             dataset = load_from_disk(artifact_dir)
         else:
-            dataset = load_dataset("shunk031/JGLUE", name=eval_category[3])
+            dataset = load_dataset("shunk031/JGLUE", trust_remote_code=True, name=eval_category[3])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
             max_new_tokens=25, torch_dtype=torch.bfloat16, temperature=temperature,
@@ -130,7 +130,7 @@ if __name__ == "__main__":
             artifact_dir = artifact.download()
             dataset = load_from_disk(artifact_dir)
         else:
-            dataset = load_dataset("shunk031/JGLUE", name=eval_category[4])
+            dataset = load_dataset("shunk031/JGLUE", trust_remote_code=True, name=eval_category[4])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
             max_new_tokens=5, torch_dtype=torch.bfloat16, temperature=temperature,
@@ -147,7 +147,7 @@ if __name__ == "__main__":
             artifact_dir = artifact.download()
             dataset = load_from_disk(artifact_dir)
         else:
-            dataset = load_dataset("shunk031/JGLUE", name=eval_category[5])
+            dataset = load_dataset("shunk031/JGLUE", trust_remote_code=True, name=eval_category[5])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
             max_new_tokens=5, torch_dtype=torch.bfloat16, temperature=temperature,
