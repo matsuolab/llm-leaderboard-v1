@@ -1,3 +1,12 @@
+# 手順
+```
+git clone https://github.com/matsuolab/llm-leaderboard-v1.git -b jglue
+cd llm-leaderboard-v1
+docker build -t llm-leaderboard .
+cd $HOME
+docker run --env-file .env --mount type=bind,src=$PWD,dst=$PWD --workdir $PWD/llm-leaderboard-v1 --ipc host --gpus all --rm --name `whoami`_llm-leaderboard llm-leaderboard python3 src/japanese-task-evaluation.py
+```
+
 # Weights & BiasesのLaunchを用いて、Hugging Face上のモデルを日本語タスクJGLEUに対して評価！
 
 このgit repositoryでは、Hugging Face上のモデルを日本語タスクJGLEUに対して精度評価するためのscriptを管理しています。

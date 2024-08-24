@@ -1,12 +1,19 @@
-FROM rapidsai/rapidsai:cuda11.8-base-ubuntu22.04-py3.10
-WORKDIR /app
-COPY requirements.txt .
-COPY src/japanese-task-evaluation.py ./
-COPY src/utils.py ./
-COPY src/prompt_template.py ./
+FROM nvcr.io/nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 
-RUN pip install --upgrade pip
-RUN pip install --upgrade setuptools
-RUN pip install --no-cache-dir -r requirements.txt
+ENV DEBIAN_FRONTEND noninteractive
 
-ENTRYPOINT ["python", "japanese-task-evaluation.py"]
+RUN apt-get update -y && apt-get install -y sudo python3 python3-pip git curl build-essential
+
+# RustとCargoをインストール
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+# requirements.txtをコンテナにコピー
+RUN pip3 install --upgrade pip
+COPY requirements.txt /tmp/requirements.txt
+# pip install で必要なパッケージをインストール
+RUN pip3 install -r /tmp/requirements.txt
+
+RUN pip3 install wheel 
+RUN pip3 install flash-attn --no-build-isolation
+RUN pip3 install -U transformers

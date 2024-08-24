@@ -18,21 +18,22 @@ from utils import eval_MARC_ja, eval_JSTS, eval_JNLI, eval_JSQuAD, eval_JCommons
 from peft import PeftModel, PeftConfig
 
 
-"can be changed in W&B Launch's setting"
-model_name = "cyberagent/open-calm-small"
-config = dict(
-    wandb_project="LLM_evaluation_Japan",
-    wandb_entity="wandb",
-    model_name=model_name,
-    prompt_type="other",
-    use_artifact = True,
-    use_peft=False,
-    run_name=model_name,
-    )
-
-login(os.environ['HUGGINGFACE_TOKEN'])
-
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model_name", type=str, default="cyberagent/open-calm-small")
+    args = parser.parse_args()
+    config = dict(
+        wandb_project="JGLUE",
+        wandb_entity="weblab-geniac8",
+        model_name=args.model_name,
+        prompt_type="other",
+        use_artifact=False,
+        use_peft=False,
+        run_name=args.model_name,
+        )
+
+
     eval_category = ['MARC-ja', 'JSTS', 'JNLI', 'JSQuAD', 'JCommonsenseQA','JCoLA']
     with wandb.init(project=config["wandb_project"], entity=config["wandb_entity"], config=config, job_type="eval") as run:
         config = wandb.config
@@ -50,10 +51,10 @@ if __name__ == "__main__":
 
         if config.use_peft:
             peft_config = PeftConfig.from_pretrained(config.model_name)
-            model = AutoModelForCausalLM.from_pretrained(peft_config.base_model_name_or_path,  torch_dtype=torch.float16)
+            model = AutoModelForCausalLM.from_pretrained(peft_config.base_model_name_or_path,  torch_dtype=torch.bfloat16)
             model = PeftModel.from_pretrained(model, config.model_name)
         else:
-            model = AutoModelForCausalLM.from_pretrained(config.model_name, trust_remote_code=True,torch_dtype=torch.float16)
+            model = AutoModelForCausalLM.from_pretrained(config.model_name, trust_remote_code=True,torch_dtype=torch.bfloat16,device_map="auto")
         template_type = config.prompt_type
 
         #MRAC-ja --------------------------------------------------------
@@ -65,7 +66,7 @@ if __name__ == "__main__":
             dataset = load_dataset("shunk031/JGLUE", name=eval_category[0])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
-            max_new_tokens=5, device=0, torch_dtype=torch.float16, temperature=temperature, 
+            max_new_tokens=5, torch_dtype=torch.bfloat16, temperature=temperature, 
         )
         llm = HuggingFacePipeline(pipeline=pipe)
         llm_chain = LLMChain(llm=llm, prompt=get_template(eval_category[0], template_type), output_key="output")
@@ -81,7 +82,7 @@ if __name__ == "__main__":
             dataset = load_dataset("shunk031/JGLUE", name=eval_category[1])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
-            max_new_tokens=3, device=0, torch_dtype=torch.float16, temperature=temperature,
+            max_new_tokens=3, torch_dtype=torch.bfloat16, temperature=temperature,
         )
         llm = HuggingFacePipeline(pipeline=pipe)
         llm_chain = LLMChain(llm=llm, prompt=get_template(eval_category[1], template_type), output_key="output")
@@ -97,7 +98,7 @@ if __name__ == "__main__":
             dataset = load_dataset("shunk031/JGLUE", name=eval_category[2])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
-            max_new_tokens=3, device=0, torch_dtype=torch.float16, temperature=temperature,
+            max_new_tokens=3, torch_dtype=torch.bfloat16, temperature=temperature,
         )
         llm = HuggingFacePipeline(pipeline=pipe)
         llm_chain = LLMChain(llm=llm, prompt=get_template(eval_category[2], template_type), output_key="output")
@@ -114,7 +115,7 @@ if __name__ == "__main__":
             dataset = load_dataset("shunk031/JGLUE", name=eval_category[3])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
-            max_new_tokens=25, device=0, torch_dtype=torch.float16, temperature=temperature,
+            max_new_tokens=25, torch_dtype=torch.bfloat16, temperature=temperature,
         )
         llm = HuggingFacePipeline(pipeline=pipe)
         llm_chain = LLMChain(llm=llm, prompt=get_template(eval_category[3], template_type), output_key="output")
@@ -132,7 +133,7 @@ if __name__ == "__main__":
             dataset = load_dataset("shunk031/JGLUE", name=eval_category[4])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
-            max_new_tokens=5, device=0, torch_dtype=torch.float16, temperature=temperature,
+            max_new_tokens=5, torch_dtype=torch.bfloat16, temperature=temperature,
             )
         llm = HuggingFacePipeline(pipeline=pipe)
         llm_chain = LLMChain(llm=llm, prompt=get_template(eval_category[4], template_type), output_key="output")
@@ -149,7 +150,7 @@ if __name__ == "__main__":
             dataset = load_dataset("shunk031/JGLUE", name=eval_category[5])
         pipe = pipeline(
             "text-generation", model=model, tokenizer=tokenizer, eos_token_id=tokenizer.eos_token_id, pad_token_id=tokenizer.pad_token_id,
-            max_new_tokens=5, device=0, torch_dtype=torch.float16, temperature=temperature,
+            max_new_tokens=5, torch_dtype=torch.bfloat16, temperature=temperature,
             )
         llm = HuggingFacePipeline(pipeline=pipe)
         llm_chain = LLMChain(llm=llm, prompt=get_template(eval_category[5], template_type), output_key="output")
