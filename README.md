@@ -2,7 +2,7 @@
 ```
 git clone https://github.com/matsuolab/llm-leaderboard-v1.git -b jglue
 cd llm-leaderboard-v1
-docker build -t llm-leaderboard .
+docker build --no-cache -t llm-leaderboard . 
 cd $HOME
 docker run --env-file .env --mount type=bind,src=$PWD,dst=$PWD --workdir $PWD/llm-leaderboard-v1 --ipc host --gpus all --rm --name `whoami`_llm-leaderboard llm-leaderboard python3 src/japanese-task-evaluation.py
 ```
