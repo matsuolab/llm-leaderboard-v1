@@ -39,9 +39,9 @@ find_available_gpus() {
 run_model() {
   local gpu_ids=$1
   local model_name=$2
-  docker run --env-file .env --mount type=bind,src=$PWD,dst=$PWD \
+  sudo docker run --env-file .env --mount type=bind,src=$PWD,dst=$PWD \
   --workdir $PWD/wandb-llm-leaderboard-v1 --ipc host --gpus "\"device=$gpu_ids\"" \
-  --rm --name "`whoami`_leaderboard-v1" leaderboard-v1 python3 src/japanese-task-evaluation.py --model_name $model_name &
+  --rm --name "`whoami`_llm-leaderboard" llm-leaderboard python3 src/japanese-task-evaluation.py --model_name $model_name &
 }
 
 # モデルを実行するためのループ
