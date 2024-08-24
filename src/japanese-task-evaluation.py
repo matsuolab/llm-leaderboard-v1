@@ -19,13 +19,15 @@ from peft import PeftModel, PeftConfig
 
 
 "can be changed in W&B Launch's setting"
+model_name = "cyberagent/open-calm-small"
 config = dict(
     wandb_project="LLM_evaluation_Japan",
     wandb_entity="wandb",
-    model_name="cyberagent/open-calm-small",
+    model_name=model_name,
     prompt_type="other",
     use_artifact = True,
-    use_peft=False
+    use_peft=False,
+    run_name=model_name,
     )
 
 login(os.environ['HUGGINGFACE_TOKEN'])
