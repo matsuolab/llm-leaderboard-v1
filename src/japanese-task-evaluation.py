@@ -30,12 +30,11 @@ if __name__ == "__main__":
         prompt_type="other",
         use_artifact=False,
         use_peft=False,
-        run_name=args.model_name,
         )
 
 
     eval_category = ['MARC-ja', 'JSTS', 'JNLI', 'JSQuAD', 'JCommonsenseQA','JCoLA']
-    with wandb.init(project=config["wandb_project"], entity=config["wandb_entity"], config=config, job_type="eval") as run:
+    with wandb.init(name=config['model_name'], project=config["wandb_project"], entity=config["wandb_entity"], config=config, job_type="eval") as run:
         config = wandb.config
         table_contents = []
         table_contents.append(config["model_name"])
